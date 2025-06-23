@@ -1,0 +1,39 @@
+{
+  "name": "@based/template",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Template of a full scale application using Based",
+  "main": "index.js",
+  "type": "module",
+  "prettier": {
+    "singleQuote": true,
+    "semi": false
+  },
+  "scripts": {
+    "test": "vitest",
+    "dev": "npx @based/cli dev --cloud",
+    "dev-local": "npx @based/cli dev",
+    "deploy": "npx @based/cli deploy"
+  },
+  "dependencies": {
+    "@based/schema": "^5.0.0-alpha.20",
+    "@based/react": "^5.2.1",
+    "@based/ui": "^8.1.0-alpha",
+    "inlines": "^0.5.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@based/stories": "^0.3.2",
+    "@based/docs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@based/db": "0.0.66",
+    "prettier": "^3.5.3",
+    "@based/functions": "^3.2.3",
+    "vitest": "^3.2.4",
+    "@types/node": "^22.7.4",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
+    "typescript": "^5.6.2",
+    "@awalgawe/esbuild-typescript-paths-plugin": "1.0.1"
+  }
+}

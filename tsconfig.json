@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "strict": false,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "target": "ESNext",
+    "jsx": "react-jsx",
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["./app/*"],
+      "@cms/*": ["./cms/*"]
+    },
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "checkJs": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "exactOptionalPropertyTypes": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUncheckedIndexedAccess": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strictNullChecks": false,
+    "types": ["@based/stories"]
+  },
+  "include": [
+    "**/*.stories.*",
+    "**/based.ts",
+    "functions/*",
+    "schema/*",
+    "test/*",
+    "vitest.config.ts",
+    "types.d.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}
