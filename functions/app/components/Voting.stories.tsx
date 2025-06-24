@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { ComponentRender } from '@based/docs'
-import { Counter } from './Counter'
+import { Voting } from './Voting'
 
 export const meta: Based.Stories.MetaDescriptor = {
-  name: 'Counter',
+  name: 'Voting',
   group: 'Primitives',
   section: 'components',
   icon: 'edit',
-  component: Counter,
+  component: Voting,
   subtitle:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   showApi: true,
@@ -15,7 +15,7 @@ export const meta: Based.Stories.MetaDescriptor = {
   importSource: '@based/ui',
 }
 
-export const blocks: Based.Stories.BlocksDescriptor<typeof Counter>[] = [
+export const blocks: Based.Stories.BlocksDescriptor<typeof Voting>[] = [
   {
     name: 'Default',
     description: 'Et harum quidem rerum facilis est et expedita distinctio.',

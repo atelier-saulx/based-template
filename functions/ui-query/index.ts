@@ -29,7 +29,6 @@ type Payload = {
 }
 
 export default (async (based, payload, update) => {
-  console.log('query!', payload)
   const db = based.db.v2 as DbClient
   const { type, alias, id, sort, offset, limit, include, filter, lang } =
     payload

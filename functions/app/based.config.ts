@@ -5,7 +5,7 @@ const config: BasedFunctionConfig = {
   name: 'app',
   public: true,
   main: './app.tsx',
-  path: '/',
+  path: '/:path*',
 }
 
 export default config

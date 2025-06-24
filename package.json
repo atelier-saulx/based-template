@@ -26,7 +26,7 @@
     "@based/docs": "^0.3.0"
   },
   "devDependencies": {
-    "@based/db": "0.0.66",
+    "@based/db": "0.0.64",
     "prettier": "^3.5.3",
     "@based/functions": "^3.2.3",
     "vitest": "^3.2.4",

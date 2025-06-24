@@ -3,7 +3,6 @@ import type { BasedDb } from '@based/db'
 
 export default (async (based, payload = {}) => {
   const db = based.db.v2 as BasedDb
-  console.log('create', payload)
   const { type, id, $$lang, ...set } = payload
   const options = $$lang ? { locale: $$lang } : undefined
 
