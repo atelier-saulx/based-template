@@ -1,4 +1,4 @@
 - [ ] Add Readme
 - [ ] CLI add schema and default data
 - [ ] Add Auth
-- [ ] `cli init` should use `based-template` instead of `cli-boilerplate`
+- [ ] `cli init` should use `based-template` instead of `based-boilerplate`

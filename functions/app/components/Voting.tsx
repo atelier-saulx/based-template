@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { styled } from 'inlines'
-import { useQuery } from '@based/react'
+import { useClient, useQuery } from '@based/react'
 
 const VotingContainer = styled('div', {
   display: 'flex',
@@ -8,7 +8,7 @@ const VotingContainer = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   padding: '2rem',
-  backgroundColor: 'white',
+  backgroundColor: 'rgb(214, 214, 214)',
   borderRadius: '12px',
   boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   width: '90%',
@@ -37,7 +37,7 @@ const RadioLabel = styled('label', {
   cursor: 'pointer',
   padding: '0.5rem',
   borderRadius: '6px',
-  transition: 'background-color 0.2s',
+  transition: 'background-color 0.15s',
   '&:hover': {
     backgroundColor: '#f5f5f5',
   },
@@ -52,31 +52,97 @@ const Title = styled('h2', {
   color: '#333',
 })
 
+const Button = styled('button', {
+  padding: '0.75rem 1.5rem',
+  backgroundColor: '#007bff',
+  color: 'white',
+  border: 'none',
+  borderRadius: '6px',
+  cursor: 'pointer',
+  fontSize: '1rem',
+  fontWeight: '500',
+  transition: 'background-color 0.15s',
+  marginTop: '1rem',
+  '&:hover': {
+    backgroundColor: '#0056b3',
+  },
+  '&:disabled': {
+    backgroundColor: '#cccccc',
+    cursor: 'not-allowed',
+  },
+})
+
+const InputContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  margin: '1rem 0',
+})
+
+const InputLabel = styled('label', {
+  marginBottom: '0.5rem',
+  color: '#333',
+})
+
+const EmailInput = styled('input', {
+  padding: '0.75rem',
+  borderRadius: '6px',
+  border: '1px solid #ccc',
+  fontSize: '1rem',
+  width: '100%',
+  boxSizing: 'border-box',
+  '&:focus': {
+    borderColor: '#007bff',
+    outline: 'none',
+  },
+})
+
 export const Voting: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState('')
+  const [email, setEmail] = useState('')
+  const client = useClient()
   const { data, loading } = useQuery('contestants')
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(event.target.value)
-  }
 
   return (
     <VotingContainer>
       <Title>Cast Your Vote</Title>
+      <InputContainer>
+        <InputLabel htmlFor="email">Email Address</InputLabel>
+        <EmailInput
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          required
+        />
+      </InputContainer>
       <RadioGroup>
-        {data?.map(({ name }) => (
-          <RadioLabel key={name}>
-            <RadioInput
-              type="radio"
-              name="voting"
-              value={name}
-              checked={selectedOption === name}
-              onChange={handleChange}
-            />
-            {name}
-          </RadioLabel>
-        ))}
+        {loading
+          ? 'Loading...'
+          : data?.map(({ name, id }) => (
+              <RadioLabel key={id}>
+                <RadioInput
+                  type="radio"
+                  name="voting"
+                  value={id}
+                  checked={Number(selectedOption) === id}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setSelectedOption(e.target.value)
+                  }}
+                />
+                {name}
+              </RadioLabel>
+            ))}
       </RadioGroup>
+      <Button
+        onClick={() => {
+          client.call('submit-vote', { email, choice: selectedOption })
+        }}
+        disabled={!selectedOption || !email}
+      >
+        Submit Vote
+      </Button>
     </VotingContainer>
   )
 }

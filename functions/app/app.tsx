@@ -7,6 +7,7 @@ import basedConfig from '../../based'
 export const based: BasedClient = client(basedConfig)
 const rootElement = document.getElementById('root')!
 const root = createRoot(rootElement)
+import './index.css'
 
 const App = () => {
   return (

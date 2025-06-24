@@ -1,8 +1,6 @@
 import client, { type BasedClient } from '@based/client'
 import { docs } from '@based/docs'
 import basedConfig from '../../based.js'
-import darkImage from './assets/home-dark.png'
-import lightImage from './assets/home-light.png'
 
 export const based: BasedClient = client(basedConfig)
 const rootElement = document.getElementById('root')!
@@ -10,8 +8,6 @@ const rootElement = document.getElementById('root')!
 docs.render({
   rootElement,
   based,
-  darkImage,
-  lightImage,
   debug: false,
   languages: {
     default: 'en',
