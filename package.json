@@ -16,24 +16,25 @@
     "deploy": "npx @based/cli deploy"
   },
   "dependencies": {
-    "@based/schema": "^5.0.0-alpha.20",
+    "@based/docs": "^0.3.0",
     "@based/react": "^5.2.1",
+    "@based/schema": "^5.0.0-alpha.20",
+    "@based/stories": "^0.3.2",
     "@based/ui": "^8.1.0-alpha",
+    "@saulx/crypto": "^1.1.0",
     "inlines": "^0.5.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "@based/stories": "^0.3.2",
-    "@based/docs": "^0.3.0"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@awalgawe/esbuild-typescript-paths-plugin": "1.0.1",
     "@based/db": "0.0.64",
-    "prettier": "^3.5.3",
     "@based/functions": "^3.2.3",
-    "vitest": "^3.2.4",
     "@types/node": "^22.7.4",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
+    "prettier": "^3.5.3",
     "typescript": "^5.6.2",
-    "@awalgawe/esbuild-typescript-paths-plugin": "1.0.1"
+    "vitest": "^3.2.4"
   }
 }
