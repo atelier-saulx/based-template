@@ -8,13 +8,23 @@ export const based: BasedClient = client(basedConfig)
 const rootElement = document.getElementById('root')!
 const root = createRoot(rootElement)
 import './index.css'
+import { styled } from 'inlines'
 
 const App = () => {
   return (
-    <div>
+    <styled.div
+      style={{
+        background: '#131313',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+      }}
+    >
       <Logo />
       <Voting />
-    </div>
+    </styled.div>
   )
 }
 

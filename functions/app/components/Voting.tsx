@@ -50,11 +50,13 @@ const RadioInput = styled('input', {
 const Title = styled('h2', {
   marginBottom: '1.5rem',
   color: '#333',
+  fontFamily: `"Inter", Arial, Helvetica, sans-serif`,
 })
 
 const Button = styled('button', {
+  fontFamily: `"Inter", Arial, Helvetica, sans-serif`,
   padding: '0.75rem 1.5rem',
-  backgroundColor: '#007bff',
+  backgroundColor: 'rgb(61, 138, 247)',
   color: 'white',
   border: 'none',
   borderRadius: '6px',
@@ -77,14 +79,17 @@ const InputContainer = styled('div', {
   flexDirection: 'column',
   width: '100%',
   margin: '1rem 0',
+  fontFamily: `"Inter", Arial, Helvetica, sans-serif`,
 })
 
 const InputLabel = styled('label', {
   marginBottom: '0.5rem',
   color: '#333',
+  fontFamily: `"Inter", Arial, Helvetica, sans-serif`,
 })
 
 const EmailInput = styled('input', {
+  fontFamily: `"Inter", Arial, Helvetica, sans-serif`,
   padding: '0.75rem',
   borderRadius: '6px',
   border: '1px solid #ccc',
@@ -105,7 +110,7 @@ export const Voting: React.FC = () => {
 
   return (
     <VotingContainer>
-      <Title>Cast Your Vote</Title>
+      <Title>Cast Your Vote!</Title>
       <InputContainer>
         <InputLabel htmlFor="email">Email Address</InputLabel>
         <EmailInput
@@ -119,7 +124,7 @@ export const Voting: React.FC = () => {
       </InputContainer>
       <RadioGroup>
         {loading
-          ? 'Loading...'
+          ? 'loading...'
           : data?.map(({ name, id }) => (
               <RadioLabel key={id}>
                 <RadioInput
@@ -136,10 +141,11 @@ export const Voting: React.FC = () => {
             ))}
       </RadioGroup>
       <Button
-        onClick={() => {
-          client.call('submit-vote', { email, choice: selectedOption })
+        onClick={(e) => {
+          e.preventDefault()
+          console.log('selected', selectedOption)
+          client.call('submit-vote', { email, choice: Number(selectedOption) })
         }}
-        disabled={!selectedOption || !email}
       >
         Submit Vote
       </Button>

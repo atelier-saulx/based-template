@@ -1,8 +1,8 @@
 import type { BasedFunction } from '@based/functions'
-import type { BasedDb } from '@based/db'
+// import type { BasedDb } from '@based/db'
 
 const fn: BasedFunction = async (based, payload = {}) => {
-  const db = based.db.v2 as BasedDb
+  const db = based.db.v2
 
   const { choice, email } = payload
 
@@ -10,7 +10,7 @@ const fn: BasedFunction = async (based, payload = {}) => {
     throw new Error('bad payload')
   }
 
-  const res = await db.create('vote', { email, choice: Number(choice) })
+  const res = await db.create('vote', { email, choice })
   return res
 }
 

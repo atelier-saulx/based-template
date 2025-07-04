@@ -1,11 +1,13 @@
 import client, { type BasedClient } from '@based/client'
 import { docs } from '@based/docs'
 import basedConfig from '../../based.js'
+import '../app/index.css'
 
 export const based: BasedClient = client(basedConfig)
 const rootElement = document.getElementById('root')!
 
 docs.render({
+  baseUrl: '/stories',
   rootElement,
   based,
   debug: false,
@@ -17,7 +19,7 @@ docs.render({
         home: {
           title: 'Based template',
           description: 'An example app for the Based platform',
-          CTA: 'Get Started',
+          CTA: 'Get started',
           alt: '',
         },
         theme: {
