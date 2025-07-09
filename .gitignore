@@ -132,3 +132,5 @@ tmp/**/*
 apiKey.key
 claude.md
 i18n
+
+*.env
