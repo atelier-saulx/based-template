@@ -1,5 +1,4 @@
 import type { BasedFunction } from '@based/functions'
-// import type { BasedDb } from '@based/db'
 
 const fn: BasedFunction = async (based, payload = {}) => {
   const db = based.db.v2

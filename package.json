@@ -16,9 +16,10 @@
     "deploy": "npx @based/cli deploy"
   },
   "dependencies": {
-    "@based/schema": "^5.0.0-alpha.20",
+    "@based/schema": "^5.0.0-alpha.25",
     "@based/react": "^5.2.1",
     "@based/ui": "^8.1.0-alpha",
+    "@saulx/crypto": "^1.1.0",
     "inlines": "^0.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -26,7 +27,7 @@
     "@based/docs": "^0.3.1"
   },
   "devDependencies": {
-    "@based/db": "0.0.64",
+    "@based/db": "0.0.69",
     "@based/cli": "8.0.0-alpha.59",
     "prettier": "^3.5.3",
     "@based/functions": "^3.2.3",

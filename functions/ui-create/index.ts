@@ -1,8 +1,8 @@
 import type { BasedFunction } from '@based/functions'
-import type { BasedDb } from '@based/db'
+import type { DbClient } from '@based/db'
 
 export default (async (based, payload = {}) => {
-  const db = based.db.v2 as BasedDb
+  const db = based.db.v2 as DbClient
   const { type, id, $$lang, ...set } = payload
   const options = $$lang ? { locale: $$lang } : undefined
 
