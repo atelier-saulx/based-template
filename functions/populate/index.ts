@@ -13,7 +13,7 @@ const fn: BasedFunction = async (based, payload, ctx) => {
   // http://localhost:1234/populate?sample_data=true
 
   // TODO: remove ability to load sample data
-  if (payload.sample_data) {
+  if (payload?.sample_data) {
     for (const contestant of contestants) {
       db.create('contestant', contestant)
     }
@@ -30,7 +30,11 @@ const fn: BasedFunction = async (based, payload, ctx) => {
     }
 
     for (const user of DEFAULT_USERS) {
-      db.create('user', { email: user, password: DEFAULT_PASSWORD })
+      db.create('user', {
+        email: user,
+        password: DEFAULT_PASSWORD,
+        role: 'admin',
+      })
     }
 
     await db.drain()

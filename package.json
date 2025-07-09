@@ -12,6 +12,7 @@
   "scripts": {
     "test": "vitest",
     "dev": "npx @based/cli dev",
+    "dev-op": "./scripts/check1Password.sh && op run --env-file=\"./local.env\" --no-masking -- node_modules/@based/cli/bin/cmd.js dev",
     "dev-cloud": "npx @based/cli dev --cloud",
     "deploy": "npx @based/cli deploy"
   },

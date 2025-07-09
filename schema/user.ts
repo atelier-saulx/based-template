@@ -13,8 +13,9 @@ export const user: SchemaType = {
     format: 'password',
     transform: (type, value) => {
       if (type === 'create' || type === 'filter' || type === 'update') {
-        // TODO: this can be optimized
+        console.log('PEPPER!', PEPPER)
 
+        // TODO: this can be optimized
         const crypto = require('crypto')
         const hmac1 = crypto.createHmac('sha512', HMAC_SECRET)
         hmac1.update(value + PEPPER)
