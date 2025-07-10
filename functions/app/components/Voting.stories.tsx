@@ -4,7 +4,7 @@ import { Voting } from './Voting'
 
 export const meta: Based.Stories.MetaDescriptor = {
   name: 'Voting',
-  group: 'Primitives',
+  group: 'Components',
   section: 'components',
   icon: 'edit',
   component: Voting,

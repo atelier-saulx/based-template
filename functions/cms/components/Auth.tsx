@@ -17,7 +17,7 @@ export const Auth = ({ children }: { children: React.ReactNode }) => {
     >
       <AuthPage
         type="email-password"
-        title="Eurovision 2025 CMS"
+        title="Template CMS"
         onSubmit={async ({ email, password }) => {
           await client.call('login', {
             email,
