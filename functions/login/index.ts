@@ -1,6 +1,7 @@
 import { DbClient } from '@based/db'
 import { type BasedFunction } from '@based/functions'
 import { sign } from '@saulx/crypto'
+import { hashPassword } from '../utils'
 
 const USER_TOKEN_EXPIRY = 604_800_000
 
@@ -32,10 +33,11 @@ const fn: BasedFunction = async (based, payload, ctx) => {
     throw new Error('Not allowed')
   }
 
-  const digest = db.schema?.types?.user.props.password.transform?.(
-    'update',
-    password,
-  )
+  const digest = hashPassword(password)
+  // const digest = db.schema?.types?.user.props.password.transform?.(
+  //   'update',
+  //   password,
+  // )
 
   if (user.password === digest) {
     await based.renewAuthState(ctx, {

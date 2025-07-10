@@ -4,8 +4,8 @@ export const Logo = () => {
   return (
     <img
       style={{
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        height: '40px',
+        width: 'auto',
       }}
       alt="Based.io"
       src={logo}
