@@ -33,11 +33,11 @@ const fn: BasedFunction = async (based, payload, ctx) => {
     throw new Error('Not allowed')
   }
 
-  const digest = hashPassword(password)
-  // const digest = db.schema?.types?.user.props.password.transform?.(
-  //   'update',
-  //   password,
-  // )
+  // const digest = hashPassword(password)
+  const digest = db.schema?.types?.user.props.password.transform?.(
+    'update',
+    password,
+  )
 
   if (user.password === digest) {
     await based.renewAuthState(ctx, {
@@ -50,6 +50,8 @@ const fn: BasedFunction = async (based, payload, ctx) => {
       //   privateKey,
       // ),
     })
+  } else {
+    throw new Error('Not allowed')
   }
 }
 

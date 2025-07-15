@@ -18,7 +18,7 @@ const fn: BasedFunction = async (based, payload, ctx) => {
   for (const user of DEFAULT_USERS) {
     db.create('user', {
       email: user,
-      password: hashPassword(DEFAULT_PASSWORD),
+      password: DEFAULT_PASSWORD,
       role: 'admin',
     })
   }

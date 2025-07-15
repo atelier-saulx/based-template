@@ -15,7 +15,6 @@ export const user: SchemaType = {
       if (type === 'create' || type === 'filter' || type === 'update') {
         // TODO: this can be optimized
         const crypto = require('crypto')
-        console.log('DIGESTING nom nom nom')
         const hmac1 = crypto.createHmac('sha512', HMAC_SECRET)
         hmac1.update(value + PEPPER)
         const digest1 = hmac1.digest('hex')
@@ -27,7 +26,7 @@ export const user: SchemaType = {
       return value
     },
   },
-  role: ['admin', 'viwer'],
+  role: ['admin', 'viewer'],
   createdAt: { type: 'timestamp', on: 'create' },
   updatedAt: { type: 'timestamp', on: 'update' },
 }
