@@ -14,29 +14,31 @@
     "dev": "npx @based/cli dev",
     "dev-op": "./scripts/check1Password.sh && op run --env-file=\"./local.env\" --no-masking -- node_modules/@based/cli/bin/cmd.js dev",
     "dev-cloud": "npx @based/cli dev --cloud",
-    "deploy": "npx @based/cli deploy"
+    "typecheck": "tsc --noEmit",
+    "deploy": "npx @based/cli deploy",
+    "clean": "git -dfx"
   },
   "dependencies": {
-    "@based/schema": "^5.0.0-alpha.25",
+    "@based/docs": "^0.3.1",
     "@based/react": "^5.2.1",
+    "@based/schema": "^5.0.0-alpha.25",
+    "@based/stories": "^0.3.2",
     "@based/ui": "^8.1.0-alpha",
     "@saulx/crypto": "^1.1.0",
     "inlines": "^0.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "@based/stories": "^0.3.2",
-    "@based/docs": "^0.3.1",
     "wouter": "^3.7.1"
   },
   "devDependencies": {
-    "@based/db": "0.0.69",
     "@based/cli": "8.0.0-alpha.59",
-    "prettier": "^3.5.3",
+    "@based/db": "0.0.69",
     "@based/functions": "^3.2.3",
-    "vitest": "^3.2.4",
     "@types/node": "^22.7.4",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
-    "typescript": "^5.6.2"
+    "prettier": "^3.5.3",
+    "typescript": "^5.6.2",
+    "vitest": "^3.2.4"
   }
 }

@@ -11,21 +11,21 @@ export const user: SchemaType = {
   password: {
     type: 'string',
     format: 'password',
-    // TODO: renable this once tranform works on the cloud
-    // transform: (type, value) => {
-    //   if (type === 'create' || type === 'filter' || type === 'update') {
-    //     // TODO: this can be optimized
-    //     const crypto = require('crypto')
-    //     const hmac1 = crypto.createHmac('sha512', HMAC_SECRET)
-    //     hmac1.update(value + PEPPER)
-    //     const digest1 = hmac1.digest('hex')
-    //     const hmac2 = crypto.createHmac('sha512', HMAC_SECRET)
-    //     hmac2.update(digest1 + PEPPER)
-    //     const digest2 = hmac2.digest('hex')
-    //     return digest2
-    //   }
-    //   return value
-    // },
+    transform: (type, value) => {
+      if (type === 'create' || type === 'filter' || type === 'update') {
+        // TODO: this can be optimized
+        const crypto = require('crypto')
+        console.log('DIGESTING nom nom nom')
+        const hmac1 = crypto.createHmac('sha512', HMAC_SECRET)
+        hmac1.update(value + PEPPER)
+        const digest1 = hmac1.digest('hex')
+        const hmac2 = crypto.createHmac('sha512', HMAC_SECRET)
+        hmac2.update(digest1 + PEPPER)
+        const digest2 = hmac2.digest('hex')
+        return digest2
+      }
+      return value
+    },
   },
   role: ['admin', 'viwer'],
   createdAt: { type: 'timestamp', on: 'create' },

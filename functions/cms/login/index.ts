@@ -1,7 +1,7 @@
 import { DbClient } from '@based/db'
 import { type BasedFunction } from '@based/functions'
 import { sign } from '@saulx/crypto'
-import { hashPassword } from '../utils'
+import { hashPassword } from '../../utils'
 
 const USER_TOKEN_EXPIRY = 604_800_000
 

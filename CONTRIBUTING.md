@@ -60,3 +60,51 @@ const a = (ctx) => {
 ### Code Organization
 
 For front end code (React especially) aim for 250 lines max of code for files - except if it makes things more difficult (principle #1)
+
+### Avoid thirdparty dependencies
+
+Unless absolutely required (eg: stipe api), do not add new external dependencies.
+
+### No comments
+
+Code should be clear enough to be self-documenting. Only add JSdoc style comments on top level APIs.
+
+### Types over interfaces
+
+Use `type Thing = { x: boolean }` for all types, never use `interface`.
+
+### Use of `import type` syntax
+
+Either import ONLY types (in which case you must use `import type`), or import everything together (no type keyword).  
+Never split imports from the same module or use inline type modifiers.
+
+```ts
+// Good:
+import type { UserConfig, DatabaseOptions } from './config'
+
+/// --------------
+
+// Good:
+import { UserConfig, DatabaseOptions, createUser, connectDatabase } from './config'
+
+/// --------------
+
+// Bad:
+import type { UserConfig, DatabaseOptions } from './config'
+import { createUser, connectDatabase } from './config'
+
+/// --------------
+
+// Bad:
+import { type UserConfig, type DatabaseOptions, createUser, connectDatabase } from './config'
+
+/// --------------
+
+// Bad:
+import { UserConfig } from './config' // UserConfig is a type!  
+
+```
+
+### React specific rules
+
+- [ ] Don't use `useCallback`, use regular anonymous functions instead.

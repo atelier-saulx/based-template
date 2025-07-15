@@ -130,7 +130,6 @@ tmp/**/*
 
 # Based CLI apiKey
 apiKey.key
-claude.md
 i18n
 
 *.env
