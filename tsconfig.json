@@ -9,7 +9,7 @@
     "baseUrl": ".",
     "paths": {
       "@app/*": ["apps/app/*"],
-      "@cms/*": ["./cms/*"]
+      "@cms/*": ["apps/cms/*"]
     },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -39,9 +39,9 @@
     "functions/*",
     "schema/*",
     "test/*",
+    "apps/*",
     "vitest.config.ts",
-    "types.d.ts",
-    "apps/*"
+    "types.d.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }
