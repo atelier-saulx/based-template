@@ -1,6 +1,6 @@
 import client, { type BasedClient } from '@based/client'
 import { docs } from '@based/docs'
-import basedConfig from '../../based.js'
+import basedConfig from '../../based'
 import '../app/index.css'
 
 export const based: BasedClient = client(basedConfig)

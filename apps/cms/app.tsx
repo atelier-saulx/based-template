@@ -3,7 +3,7 @@ import { Provider as BasedClientProvider } from '@based/react'
 import { createRoot } from 'react-dom/client'
 import { Cms, useBasedSchema } from '@based/ui'
 
-import basedConfig from '../based'
+import basedConfig from '../../based'
 import { Auth } from './components/Auth'
 import { Connections } from './components/Connections'
 
