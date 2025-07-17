@@ -31,7 +31,7 @@
     "wouter": "^3.7.1"
   },
   "devDependencies": {
-    "@based/cli": "8.0.0-alpha.59",
+    "@based/cli": "8.0.0-alpha.60",
     "@based/db": "0.0.69",
     "@based/functions": "^3.2.3",
     "@types/node": "^22.7.4",
