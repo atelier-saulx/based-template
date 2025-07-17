@@ -23,7 +23,7 @@
     "@based/react": "^5.2.1",
     "@based/schema": "^5.0.0-alpha.25",
     "@based/stories": "^0.3.2",
-    "@based/ui": "^8.1.0-alpha",
+    "@based/ui": "^8.2.0-alpha.2",
     "@saulx/crypto": "^1.1.0",
     "inlines": "^0.5.0",
     "react": "^18.3.1",
