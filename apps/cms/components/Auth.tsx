@@ -1,3 +1,4 @@
+import React from 'react'
 import { useAuthState, useClient } from '@based/react'
 import { AuthPage } from '@based/ui'
 

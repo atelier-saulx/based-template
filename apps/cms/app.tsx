@@ -1,3 +1,4 @@
+import React from 'react'
 import client, { type BasedClient } from '@based/client'
 import { Provider as BasedClientProvider } from '@based/react'
 import { createRoot } from 'react-dom/client'
@@ -7,7 +8,16 @@ import basedConfig from '../../based'
 import { Auth } from './components/Auth'
 import { Connections } from './components/Connections'
 
-export const based: BasedClient = client(basedConfig)
+// FIX: Revert back of make dynamic
+// export const based: BasedClient = client(basedConfig)
+
+export const based: BasedClient = client({
+  cluster: 'local',
+  org: 'saulx',
+  project: 'template',
+  env: 'production',
+  discoveryUrls: ['http://localhost:11000'],
+})
 
 // TODO:
 // - add custom page to show how to escape CMS component

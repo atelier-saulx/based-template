@@ -1,3 +1,4 @@
+import React from 'react'
 import { Contestants } from './pages/Contestants'
 import { Landing } from './pages/Landing'
 import { createRoot } from 'react-dom/client'
