@@ -16,7 +16,7 @@ export const based: BasedClient = client({
   org: 'saulx',
   project: 'template',
   env: 'production',
-  discoveryUrls: ['http://localhost:11000'],
+  discoveryUrls: ['http://localhost:25006'],
 })
 
 // TODO:
