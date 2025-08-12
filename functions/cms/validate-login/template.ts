@@ -1,0 +1,50 @@
+export const HTMLTemplate = (
+  title: string,
+  heading: string,
+  message: string,
+) => `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>${title}</title>
+    <style>
+      @font-face {
+        font-family: 'font-bold';
+        src: url('https://based-website.vercel.app/fonts/Font-Bold.woff2')
+          format('woff2');
+      }
+      @font-face {
+        font-family: 'font-regular';
+        src: url('https://based-website.vercel.app/fonts/Font-Regular.woff2')
+          format('woff2');
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: font-regular, Arial, Helvetica, sans-serif;
+        text-align: center;
+        padding: 24px;
+        margin: 0px;
+      }
+      h1 {
+        margin-top: 40px;
+        font-family: font-bold, Arial, Helvetica, sans-serif;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <!--<img
+      src="https://based-files-production.based.dev/enDf1PpVx0/fi4a9b8673/58f1157b-5092-49f5-9176-92bccf049dfb-d15dc983-a586-461b-9281-7c7834d3f32e-d491e62f-d9d9-4c3b-880c-031d37088e44.png"
+      alt="Based"
+      width="200"
+      height="200"
+      class="lightImage"
+    />-->
+    <h1>${heading}</h1>
+    <p>${message}</p>
+  </body>
+</html>`

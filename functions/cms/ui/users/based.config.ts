@@ -1,6 +1,6 @@
 import type { BasedFunctionConfig } from '@based/functions'
 
 export default {
-  type: 'function',
-  name: 'ui-update',
+  name: 'ui-users',
+  type: 'query',
 } as BasedFunctionConfig

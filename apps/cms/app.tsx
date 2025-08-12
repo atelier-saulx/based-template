@@ -2,22 +2,12 @@ import React from 'react'
 import client, { type BasedClient } from '@based/client'
 import { Provider as BasedClientProvider } from '@based/react'
 import { createRoot } from 'react-dom/client'
-import { Cms, useBasedSchema } from '@based/ui'
+import { AccountSettings, Cms, useBasedSchema, useCmsParams } from '@based/ui'
 
 import basedConfig from '../../based'
-import { Auth } from './components/Auth'
 import { Connections } from './components/Connections'
 
-// FIX: Revert back of make dynamic
-// export const based: BasedClient = client(basedConfig)
-
-export const based: BasedClient = client({
-  cluster: 'local',
-  org: 'saulx',
-  project: 'template',
-  env: 'production',
-  discoveryUrls: ['http://localhost:25006'],
-})
+export const based: BasedClient = client(basedConfig)
 
 // TODO:
 // - add custom page to show how to escape CMS component
@@ -29,8 +19,13 @@ export const based: BasedClient = client({
 
 const App = () => {
   const { data: schema } = useBasedSchema()
+  const [{ section }] = useCmsParams()
+  console.log({ section })
+
+  const appName = 'Based Template CMS'
   return (
-    <Cms client={based} base="/cms" name="Based Template CMS">
+    <Cms base="/cms" name={appName}>
+      <Cms.Auth mode="magic-link" title={appName} />
       <Cms.Tab name="Content">
         {Object.keys(schema?.types ?? {}).map((type) => {
           return (
@@ -43,7 +38,7 @@ const App = () => {
         })}
       </Cms.Tab>
       <Cms.Tab name="Custom">
-        <Cms.Section section="Connections">
+        <Cms.Section>
           <Connections />
         </Cms.Section>
       </Cms.Tab>
@@ -55,9 +50,6 @@ const rootElement = document.getElementById('root')!
 const root = createRoot(rootElement)
 root.render(
   <BasedClientProvider client={based}>
-    {/* <App /> */}
-    <Auth>
-      <App />
-    </Auth>
+    <App />
   </BasedClientProvider>,
 )

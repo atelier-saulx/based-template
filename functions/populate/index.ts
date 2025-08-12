@@ -2,8 +2,17 @@ import { DbClient } from '@based/db'
 import { type BasedFunction } from '@based/functions'
 import { hashPassword } from '../utils'
 
-const DEFAULT_USERS = ['admin@once.net']
-const DEFAULT_PASSWORD = 'admin'
+// const DEFAULT_USERS = ['admin@once.net']
+// const DEFAULT_PASSWORD = 'admin'
+// TODO: We need to make password by default, and be able to configure
+// magic link on first run or on the workspace settings.
+const DEFAULT_USERS = [
+  {
+    email: 'nuno@saulx.com',
+    name: 'Nuno Frade',
+    role: 'admin',
+  },
+]
 
 const fn: BasedFunction = async (based, payload, ctx) => {
   const db = based.db.v2 as DbClient
@@ -16,11 +25,7 @@ const fn: BasedFunction = async (based, payload, ctx) => {
   }
 
   for (const user of DEFAULT_USERS) {
-    db.create('user', {
-      email: user,
-      password: DEFAULT_PASSWORD,
-      role: 'admin',
-    })
+    db.create('user', user)
   }
 
   await db.drain()

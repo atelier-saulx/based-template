@@ -26,12 +26,24 @@ type Payload = {
   include?: string[]
   filter?: Filter
   lang?: string
+  search?: string
 }
 
 export default (async (based, payload, update) => {
   const db = based.db.v2 as DbClient
-  const { type, alias, id, sort, offset, limit, include, filter, lang } =
-    payload
+  const {
+    type,
+    alias,
+    id,
+    sort,
+    offset,
+    limit,
+    include,
+    filter,
+    lang,
+    search,
+  } = payload
+
   let query: BasedDbQuery
 
   if (!type) {
@@ -55,12 +67,14 @@ export default (async (based, payload, update) => {
   if (lang) {
     query = query.locale(lang as LangName)
   }
-
+  if (search) {
+    query = query.search(search)
+  }
   if (sort) {
     query = query.sort(sort.key, sort.direction)
   }
-  if (offset) {
-    query = query.range(offset, limit)
+  if (offset || limit) {
+    query = query.range(offset || 0, (offset || 0) + (limit || 0))
   }
   if (filter) {
     if (filter.operator === 'and') {

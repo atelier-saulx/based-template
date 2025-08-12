@@ -8,25 +8,32 @@ const HMAC_SECRET =
 export const user: SchemaType = {
   name: 'string',
   email: { type: 'alias', format: 'email' },
-  password: {
-    type: 'string',
-    format: 'password',
-    transform: (type, value) => {
-      if (type === 'create' || type === 'filter' || type === 'update') {
-        // TODO: this can be optimized
-        const crypto = require('crypto')
-        const hmac1 = crypto.createHmac('sha512', HMAC_SECRET)
-        hmac1.update(value + PEPPER)
-        const digest1 = hmac1.digest('hex')
-        const hmac2 = crypto.createHmac('sha512', HMAC_SECRET)
-        hmac2.update(digest1 + PEPPER)
-        const digest2 = hmac2.digest('hex')
-        return digest2
-      }
-      return value
+  // password: {
+  //   type: 'string',
+  //   format: 'password',
+  //   transform: (type, value) => {
+  //     if (type === 'create' || type === 'filter' || type === 'update') {
+  //       // TODO: this can be optimized
+  //       const crypto = require('crypto')
+  //       const hmac1 = crypto.createHmac('sha512', HMAC_SECRET)
+  //       hmac1.update(value + PEPPER)
+  //       const digest1 = hmac1.digest('hex')
+  //       const hmac2 = crypto.createHmac('sha512', HMAC_SECRET)
+  //       hmac2.update(digest1 + PEPPER)
+  //       const digest2 = hmac2.digest('hex')
+  //       return digest2
+  //     }
+  //     return value
+  //   },
+  // },
+  role: ['admin', 'viewer'],
+  sessions: {
+    items: {
+      ref: 'userSession',
+      prop: 'user',
     },
   },
-  role: ['admin', 'viewer'],
+  followMe: 'json',
   createdAt: { type: 'timestamp', on: 'create' },
   updatedAt: { type: 'timestamp', on: 'update' },
 }
