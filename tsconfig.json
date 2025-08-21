@@ -36,10 +36,10 @@
   "include": [
     "**/*.stories.*",
     "**/based.ts",
-    "functions/*",
-    "schema/*",
-    "test/*",
-    "apps/*",
+    "functions/**/*",
+    "schema/**/*",
+    "test/**/*",
+    "apps/**/*",
     "vitest.config.ts",
     "types.d.ts"
   ],
