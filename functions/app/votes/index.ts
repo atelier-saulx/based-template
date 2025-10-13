@@ -1,8 +1,7 @@
-import type { BasedQueryFunction } from '@based/functions'
-import type { DbClient } from '@based/db'
+import type { BasedQueryFunction } from '@based/sdk'
 
 const fn: BasedQueryFunction = async (based, payload = {}, update) => {
-  const db = based.db.v2 as DbClient
+  const db = based.db
   return db.query('vote').subscribe(update)
 }
 

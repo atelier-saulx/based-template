@@ -1,11 +1,12 @@
-import type { DbClient } from '@based/db'
+import type { DbClient } from '@based/sdk/db'
 import type {
   BasedFunctionClient,
   BasedStreamFunction,
   BasedChannelPublishFunction,
-} from '@based/functions'
+} from '@based/sdk/functions'
 
-enum FileStatus { // taken from based-cloud, would be nice to import it one day
+enum FileStatus {
+  // taken from based-cloud, would be nice to import it one day
   UPLOADING = 1,
   TRANSCODING = 2,
   READY = 3,
@@ -74,7 +75,7 @@ const subToUpdates = (
 }
 
 export default (async (based, streamPayload, ctx) => {
-  const db = based.db.v2 as DbClient
+  const db = based.db
   const { stream, mimeType, size, fileName } = streamPayload
   const { id, src, hlsManifest, dashManifest, videoPreview, thumb } =
     await based.stream(

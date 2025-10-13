@@ -1,8 +1,7 @@
-import type { Authorize } from '@based/functions'
+import type { Authorize } from '@based/sdk'
 import { getSecret } from '../utils'
 import { sign, verify } from '@saulx/crypto'
 import { viewerValidators } from './viewerValidators'
-import { DbClient } from '@based/db'
 
 const FULL_EXPIRY = 604_800_000 // week
 const REFRESH_EXPIRY = 24 * 60 * 60e3 // day
@@ -13,7 +12,7 @@ export type Validators = Record<
 >
 
 const authorize: Authorize = async (based, ctx, name, payload) => {
-  const db = based.db.v2 as DbClient
+  const db = based.db
   const authState = ctx.session?.authState
   const token = authState?.token
 

@@ -1,11 +1,10 @@
-import type { DbClient } from '@based/db'
-import type { BasedQueryFunction } from '@based/functions'
+import type { BasedQueryFunction } from '@based/sdk/functions'
 
 export default (async (based, payload, update) => {
   if (!payload?.type) {
     throw new Error('No type in total payload')
   }
-  const db = based.db.v2 as DbClient
+  const db = based.db
   return db
     .query(payload.type)
     .count()

@@ -29,13 +29,10 @@ export const blocks: Based.Stories.BlocksDescriptor[] = [
     description: 'Topbar responsive behavior on mobile.',
     render: ({ meta, blocks, block }) => {
       return (
-        <ComponentRender
-          meta={meta}
-          blocks={blocks}
-          block={block}
-          style={{ maxWidth: '480px' }}
-        >
-          <TopBar />
+        <ComponentRender meta={meta} blocks={blocks} block={block}>
+          <div style={{ maxWidth: '480px' }}>
+            <TopBar />
+          </div>
         </ComponentRender>
       )
     },
@@ -45,13 +42,10 @@ export const blocks: Based.Stories.BlocksDescriptor[] = [
     description: 'Topbar spanning full container width.',
     render: ({ meta, blocks, block }) => {
       return (
-        <ComponentRender
-          meta={meta}
-          blocks={blocks}
-          block={block}
-          style={{ width: '100%' }}
-        >
-          <TopBar />
+        <ComponentRender meta={meta} blocks={blocks} block={block}>
+          <div style={{ width: '100%' }}>
+            <TopBar />
+          </div>
         </ComponentRender>
       )
     },

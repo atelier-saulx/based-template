@@ -1,4 +1,4 @@
-import type { BasedFunctionConfig } from '@based/functions'
+import type { BasedFunctionConfig } from '@based/sdk/functions'
 import { storiesPlugin } from '@based/stories'
 
 const config: BasedFunctionConfig = {

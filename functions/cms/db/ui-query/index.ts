@@ -1,6 +1,6 @@
-import type { BasedDbQuery, DbClient, Operator } from '@based/db'
-import type { BasedQueryFunction } from '@based/functions'
-import type { LangName } from '@based/schema'
+import type { BasedDbQuery, Operator } from '@based/sdk/db'
+import type { BasedQueryFunction } from '@based/sdk/functions'
+import type { LangName } from '@based/sdk/schema'
 
 // TODO: match these to types in the db
 type FilterGroupItem = { field: string; operator: Operator; value: string }
@@ -29,7 +29,7 @@ type Payload = {
 }
 
 export default (async (based, payload, update) => {
-  const db = based.db.v2 as DbClient
+  const db = based.db
   const { type, alias, id, sort, offset, limit, include, filter, lang } =
     payload
   let query: BasedDbQuery

@@ -29,13 +29,10 @@ export const blocks: Based.Stories.BlocksDescriptor[] = [
     description: 'Logo on dark background.',
     render: ({ meta, blocks, block }) => {
       return (
-        <ComponentRender
-          meta={meta}
-          blocks={blocks}
-          block={block}
-          style={{ backgroundColor: '#131313' }}
-        >
-          <Logo />
+        <ComponentRender meta={meta} blocks={blocks} block={block}>
+          <div style={{ backgroundColor: '#131313' }}>
+            <Logo />
+          </div>
         </ComponentRender>
       )
     },
@@ -45,13 +42,10 @@ export const blocks: Based.Stories.BlocksDescriptor[] = [
     description: 'Logo on light background.',
     render: ({ meta, blocks, block }) => {
       return (
-        <ComponentRender
-          meta={meta}
-          blocks={blocks}
-          block={block}
-          style={{ backgroundColor: '#f5f5f5' }}
-        >
-          <Logo />
+        <ComponentRender meta={meta} blocks={blocks} block={block}>
+          <div style={{ backgroundColor: '#f5f5f5' }}>
+            <Logo />
+          </div>
         </ComponentRender>
       )
     },

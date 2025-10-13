@@ -1,12 +1,11 @@
-import { DbClient } from '@based/db'
-import { type BasedFunction } from '@based/functions'
+import { type BasedFunction } from '@based/sdk/functions'
 import { hashPassword } from '../utils'
 
 const DEFAULT_USERS = ['admin@once.net']
 const DEFAULT_PASSWORD = 'admin'
 
 const fn: BasedFunction = async (based, payload, ctx) => {
-  const db = based.db.v2 as DbClient
+  const db = based.db
 
   // http://localhost:1234/populate
 

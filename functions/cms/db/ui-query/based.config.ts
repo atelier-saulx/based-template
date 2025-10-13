@@ -1,4 +1,4 @@
-import type { BasedFunctionConfig } from '@based/functions'
+import type { BasedFunctionConfig } from '@based/sdk/functions'
 
 export default {
   name: 'ui-query',

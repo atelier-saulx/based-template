@@ -1,4 +1,4 @@
-import { BasedFunctionClient } from '@based/functions'
+import { BasedFunctionClient } from '@based/sdk/functions'
 import { createHmac } from 'crypto'
 
 export const getSecret = (based: BasedFunctionClient, key: string) =>

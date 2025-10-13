@@ -1,9 +1,8 @@
-import type { BasedFunction } from '@based/functions'
-import type { DbClient } from '@based/db'
+import type { BasedFunction } from '@based/sdk/functions'
 
 export default (async (based, payload) => {
   let { type = '_root', id, $$lang, ...set } = payload || {}
-  const db = based.db.v2 as DbClient
+  const db = based.db
 
   id = Number(id)
 

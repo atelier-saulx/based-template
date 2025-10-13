@@ -1,7 +1,7 @@
-import type { BasedFunction } from '@based/functions'
+import type { BasedFunction } from '@based/sdk'
 
 const fn: BasedFunction = async (based, payload = {}) => {
-  const db = based.db.v2
+  const db = based.db
 
   const { choice, email } = payload
 

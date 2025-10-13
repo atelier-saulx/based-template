@@ -1,12 +1,11 @@
-import { DbClient } from '@based/db'
-import { type BasedFunction } from '@based/functions'
+import { type BasedFunction } from '@based/sdk/functions'
 import { sign } from '@saulx/crypto'
 import { hashPassword } from '../../utils'
 
 const USER_TOKEN_EXPIRY = 604_800_000
 
 const fn: BasedFunction = async (based, payload, ctx) => {
-  const db = based.db.v2 as DbClient
+  const db = based.db
 
   let { email, password } = payload || {}
 
@@ -34,9 +33,9 @@ const fn: BasedFunction = async (based, payload, ctx) => {
   }
 
   // const digest = hashPassword(password)
-  const digest = db.schema?.types?.user.props.password.transform?.(
-    'update',
+  const digest = db.schema?.types?.user.props.password.hooks.create?.(
     password,
+    null,
   )
 
   if (user.password === digest) {
