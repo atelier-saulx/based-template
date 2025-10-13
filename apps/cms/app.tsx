@@ -1,7 +1,7 @@
 import client, { type BasedClient } from '@based/client'
 import { Provider as BasedClientProvider } from '@based/react'
 import { createRoot } from 'react-dom/client'
-import { Cms, useBasedSchema } from '@based/ui'
+import { BasedUiProvider, Cms, useBasedSchema } from '@based/ui'
 
 import basedConfig from '../../based'
 import { Auth } from './components/Auth'
@@ -17,16 +17,19 @@ export const based: BasedClient = client(basedConfig)
 // - add routing in the frontend app
 // - add SSR (later)
 
+const appName = 'Based Template CMS'
+
 const App = () => {
   const { data: schema } = useBasedSchema()
   return (
-    <Cms client={based} base="/cms" name="Based Template CMS">
+    <Cms.Body name={appName} hideAccountSettings hideWorkspaceSettings>
+      <Cms.Auth mode="email-password" appName={appName} loginEndpoint="login" />
       <Cms.Tab name="Content">
         {Object.keys(schema?.types ?? {}).map((type) => {
           return (
             <Cms.Finder
               section={type.charAt(0).toUpperCase() + type.slice(1)}
-              type={type}
+              schemaType={type}
               key={type}
             />
           )
@@ -37,17 +40,16 @@ const App = () => {
           <Connections />
         </Cms.Section>
       </Cms.Tab>
-    </Cms>
+    </Cms.Body>
   )
 }
 
 const rootElement = document.getElementById('root')!
 const root = createRoot(rootElement)
 root.render(
-  <BasedClientProvider client={based}>
-    {/* <App /> */}
-    <Auth>
+  <BasedUiProvider client={based}>
+    <Cms.Provider base="/cms">
       <App />
-    </Auth>
-  </BasedClientProvider>,
+    </Cms.Provider>
+  </BasedUiProvider>,
 )

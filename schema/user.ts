@@ -35,7 +35,20 @@ export const user: SchemaType = {
       },
     },
   },
+  picture: {
+    type: 'string',
+    mime: 'image/*',
+    compression: 'none',
+  },
+  followMe: 'json',
   role: ['admin', 'viewer'],
+  sessions: {
+    readOnly: true,
+    items: {
+      ref: 'userSession',
+      prop: 'user',
+    },
+  },
   createdAt: { type: 'timestamp', on: 'create' },
   updatedAt: { type: 'timestamp', on: 'update' },
 }
