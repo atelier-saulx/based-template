@@ -1,7 +1,12 @@
 import client, { type BasedClient } from '@based/client'
 import { Provider as BasedClientProvider } from '@based/react'
 import { createRoot } from 'react-dom/client'
-import { BasedUiProvider, Cms, useBasedSchema } from '@based/ui'
+import {
+  AccountSettings,
+  BasedUiProvider,
+  Cms,
+  useBasedSchema,
+} from '@based/ui'
 
 import basedConfig from '../../based'
 import { Auth } from './components/Auth'
@@ -22,7 +27,7 @@ const appName = 'Based Template CMS'
 const App = () => {
   const { data: schema } = useBasedSchema()
   return (
-    <Cms.Body name={appName} hideAccountSettings hideWorkspaceSettings>
+    <Cms.Body name={appName} hideWorkspaceSettings followMe={false}>
       <Cms.Auth mode="email-password" appName={appName} loginEndpoint="login" />
       <Cms.Tab name="Content">
         {Object.keys(schema?.types ?? {}).map((type) => {
@@ -38,6 +43,11 @@ const App = () => {
       <Cms.Tab name="Custom">
         <Cms.Section section="Connections">
           <Connections />
+        </Cms.Section>
+      </Cms.Tab>
+      <Cms.Tab hidden name="Account Settings" icon="user-setting">
+        <Cms.Section section="account-settings">
+          <AccountSettings />
         </Cms.Section>
       </Cms.Tab>
     </Cms.Body>
