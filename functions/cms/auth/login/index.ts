@@ -3,6 +3,7 @@ import { isWsContext, type BasedFunction } from '@based/sdk/functions'
 import { getIdTokenSecret } from '../utils/getIdTokenSecret'
 import { getIpInfo } from '../utils/getIpInfo'
 import { signIdToken } from '../utils/idToken'
+import { hashPassword } from 'schema/user'
 
 export const USER_TOKEN_EXPIRY = 604_800_000
 
@@ -38,10 +39,8 @@ const fn: BasedFunction = async (based, payload, ctx) => {
     throw new Error('Not allowed')
   }
 
-  const digest = db.schema?.types?.user.props.password.hooks?.create?.(
-    password,
-    {},
-  )
+  const salt = user.password.split(':')[0]
+  const digest = salt + ':' + hashPassword(password, salt)
 
   if (user.password === digest) {
     const idTokenSecret = await getIdTokenSecret(based)

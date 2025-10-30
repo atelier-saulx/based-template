@@ -1,5 +1,4 @@
 import { type BasedFunction } from '@based/sdk/functions'
-import { hashPassword } from '../utils'
 
 const DEFAULT_USERS = ['admin@once.net']
 const DEFAULT_PASSWORD = 'admin'

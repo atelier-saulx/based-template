@@ -1,20 +1,17 @@
 import type { SchemaType } from '@based/schema'
+import { pbkdf2Sync, randomBytes } from 'node:crypto'
 
-// TODO: Add ENV variables
-const PEPPER = process.env.PEPPER || 'f5471afa8793530ea72de995d54451b2a6235713'
-const HMAC_SECRET =
-  process.env.HMAC_SECRET || 'b330eff681f5d38cdb98eca44d00d9e5cfde6b8d'
+export const hashPassword = (value: string, salt: string) => {
+  const iterations = 600_000
+  const keylen = 64
+  const digest = 'sha256'
+  const derivedKey = pbkdf2Sync(value, salt, iterations, keylen, digest)
+  return derivedKey.toString('hex')
+}
 
-export const hashPassword = (value: string) => {
-  // TODO: this can be optimized
-  const crypto = require('crypto')
-  const hmac1 = crypto.createHmac('sha512', HMAC_SECRET)
-  hmac1.update(value + PEPPER)
-  const digest1 = hmac1.digest('hex')
-  const hmac2 = crypto.createHmac('sha512', HMAC_SECRET)
-  hmac2.update(digest1 + PEPPER)
-  const digest2 = hmac2.digest('hex')
-  return digest2
+const saltAndHashPassword = (value: string) => {
+  const salt = randomBytes(16).toString('hex')
+  return `${salt}:${hashPassword(value, salt)}`
 }
 
 export const user: SchemaType = {
@@ -25,13 +22,13 @@ export const user: SchemaType = {
     format: 'password',
     hooks: {
       create(value, _payload) {
-        return hashPassword(value)
+        return saltAndHashPassword(value)
       },
       filter(query, field, operator, value) {
-        query.filter(field, operator, hashPassword(value))
+        query.filter(field, operator, value)
       },
       update(value: string, _payload) {
-        return hashPassword(value)
+        return saltAndHashPassword(value)
       },
     },
   },
