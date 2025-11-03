@@ -14,6 +14,18 @@ const saltAndHashPassword = (value: string) => {
   return `${salt}:${hashPassword(value, salt)}`
 }
 
+export const userStatuses = {
+  Active: 'active',
+  Onboarding: 'onboarding',
+  Pending: 'pending',
+  Inactive: 'inactive',
+} as const
+
+export const userRoles = {
+  Admin: 'admin',
+  Viewer: 'viewer',
+} as const
+
 export const user: SchemaType = {
   name: 'string',
   email: { type: 'alias', format: 'email' },
@@ -32,13 +44,14 @@ export const user: SchemaType = {
       },
     },
   },
+  status: Object.values(userStatuses),
   picture: {
     type: 'string',
     mime: 'image/*',
     compression: 'none',
   },
   followMe: 'json',
-  role: ['admin', 'viewer'],
+  role: Object.values(userRoles),
   sessions: {
     readOnly: true,
     items: {

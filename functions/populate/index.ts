@@ -1,6 +1,17 @@
 import { type BasedFunction } from '@based/sdk/functions'
 
-const DEFAULT_USERS = ['admin@once.net']
+// password
+// const DEFAULT_USERS = ['admin@once.net']
+
+// magic-link
+const DEFAULT_USERS = [
+  {
+    email: 'nuno@saulx.com',
+    role: 'admin',
+    status: 'active',
+    name: 'Nuno Frade',
+  },
+]
 const DEFAULT_PASSWORD = 'admin'
 
 const fn: BasedFunction = async (based, payload, ctx) => {
@@ -14,10 +25,16 @@ const fn: BasedFunction = async (based, payload, ctx) => {
   }
 
   for (const user of DEFAULT_USERS) {
+    // password
+    // db.create('user', {
+    //   email: user,
+    //   password: DEFAULT_PASSWORD,
+    //   role: 'admin',
+    // })
+
+    // magiclink
     db.create('user', {
-      email: user,
-      password: DEFAULT_PASSWORD,
-      role: 'admin',
+      ...user,
     })
   }
 
