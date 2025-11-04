@@ -1,5 +1,4 @@
 import client, { type BasedClient } from '@based/client'
-import { Provider as BasedClientProvider } from '@based/react'
 import { createRoot } from 'react-dom/client'
 import {
   AccountSettings,
@@ -9,7 +8,6 @@ import {
 } from '@based/ui'
 
 import basedConfig from '../../based'
-import { Auth } from './components/Auth'
 import { Connections } from './components/Connections'
 
 export const based: BasedClient = client(basedConfig)
@@ -28,7 +26,13 @@ const App = () => {
   const { data: schema } = useBasedSchema()
   return (
     <Cms.Body name={appName} hideWorkspaceSettings followMe={false}>
-      <Cms.Auth mode="email-password" appName={appName} loginEndpoint="login" />
+      <Cms.Auth
+        // mode="email-password"
+        mode="magic-link"
+        appName={appName}
+        // loginEndpoint="login-password"
+        loginEndpoint="login-magiclink"
+      />
       <Cms.Tab name="Content">
         {Object.keys(schema?.types ?? {}).map((type) => {
           return (

@@ -4,7 +4,7 @@ import {
   HttpSession,
   WebSocketSession,
 } from '@based/sdk'
-import { USER_TOKEN_EXPIRY } from 'functions/cms/auth/login'
+import { USER_TOKEN_EXPIRY } from 'functions/cms/auth/login-password'
 import { getIdTokenSecret } from 'functions/cms/auth/utils/getIdTokenSecret'
 import { verifyIdToken } from 'functions/cms/auth/utils/idToken'
 
