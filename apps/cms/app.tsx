@@ -9,6 +9,7 @@ import {
 
 import basedConfig from '../../based'
 import { Connections } from './components/Connections'
+import { Passkeys } from './components/Passkeys'
 
 export const based: BasedClient = client(basedConfig)
 
@@ -25,36 +26,39 @@ const appName = 'Based Template CMS'
 const App = () => {
   const { data: schema } = useBasedSchema()
   return (
-    <Cms.Body name={appName} hideWorkspaceSettings followMe={false}>
-      <Cms.Auth
-        // mode="email-password"
-        mode="magic-link"
-        appName={appName}
-        // loginEndpoint="login-password"
-        loginEndpoint="login-magiclink"
-      />
-      <Cms.Tab name="Content">
-        {Object.keys(schema?.types ?? {}).map((type) => {
-          return (
-            <Cms.Finder
-              section={type.charAt(0).toUpperCase() + type.slice(1)}
-              schemaType={type}
-              key={type}
-            />
-          )
-        })}
-      </Cms.Tab>
-      <Cms.Tab name="Custom">
-        <Cms.Section section="Connections">
-          <Connections />
-        </Cms.Section>
-      </Cms.Tab>
-      <Cms.Tab hidden name="Account Settings" icon="user-setting">
-        <Cms.Section section="account-settings">
-          <AccountSettings />
-        </Cms.Section>
-      </Cms.Tab>
-    </Cms.Body>
+    <>
+      <Passkeys />
+      <Cms.Body name={appName} hideWorkspaceSettings followMe={false}>
+        <Cms.Auth
+          // mode="email-password"
+          mode="magic-link"
+          appName={appName}
+          // loginEndpoint="login-password"
+          loginEndpoint="login-magiclink"
+        />
+        <Cms.Tab name="Content">
+          {Object.keys(schema?.types ?? {}).map((type) => {
+            return (
+              <Cms.Finder
+                section={type.charAt(0).toUpperCase() + type.slice(1)}
+                schemaType={type}
+                key={type}
+              />
+            )
+          })}
+        </Cms.Tab>
+        <Cms.Tab name="Custom">
+          <Cms.Section section="Connections">
+            <Connections />
+          </Cms.Section>
+        </Cms.Tab>
+        <Cms.Tab hidden name="Account Settings" icon="user-setting">
+          <Cms.Section section="account-settings">
+            <AccountSettings />
+          </Cms.Section>
+        </Cms.Tab>
+      </Cms.Body>
+    </>
   )
 }
 
