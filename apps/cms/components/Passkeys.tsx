@@ -51,10 +51,10 @@ export const Passkeys = () => {
               const credential = (await navigator.credentials.create({
                 publicKey: config,
               })) as PublicKeyCredential | null
-              const response =
-                credential?.response as AuthenticatorAttestationResponse
               if (!credential?.response)
                 throw new Error('No credential response')
+              const response =
+                credential.response as AuthenticatorAttestationResponse
 
               const res = await client.call('passkeys-register-verify', {
                 id: credential?.id,
@@ -67,7 +67,7 @@ export const Passkeys = () => {
               })
               if (res.ok) {
                 toast('Passkey registered', {
-                  icon: 'error-filled',
+                  icon: 'checkmark-filled',
                 })
               }
             } catch (error) {
@@ -95,10 +95,28 @@ export const Passkeys = () => {
               }
               console.log({ options })
 
-              const assertion = await navigator.credentials.get({
+              const assertion = (await navigator.credentials.get({
                 publicKey: options,
-              })
+              })) as PublicKeyCredential
+              if (!assertion?.response) {
+                throw new Error('No assertion')
+              }
+              const response =
+                assertion?.response as AuthenticatorAssertionResponse
               console.log({ assertion })
+
+              const res = await client.call('passkeys-auth-verify', {
+                id: assertion.id,
+                type: assertion.type,
+                authenticatorData: arrayBufferToBase64url(
+                  response.authenticatorData,
+                ),
+                clientDataJSON: arrayBufferToBase64url(response.clientDataJSON),
+                signature: arrayBufferToBase64url(response.signature),
+                userHandle: response.userHandle
+                  ? arrayBufferToBase64url(response.userHandle)
+                  : null,
+              })
 
               // config.user.id = toArrayBuffer(config.user.id)
               // config.challenge = base64urlToArrayBuffer(config.challenge)
@@ -125,7 +143,7 @@ export const Passkeys = () => {
               // }
             } catch (error) {
               console.error(error)
-              toast('Error authentication with passkey', {
+              toast('Error authenticating with passkey', {
                 description:
                   error instanceof Error ? error.message : String(error),
                 icon: 'error-filled',

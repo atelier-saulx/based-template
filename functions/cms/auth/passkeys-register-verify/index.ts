@@ -1,14 +1,11 @@
 import { isWsContext, type BasedFunction } from '@based/sdk/functions'
 import { type } from 'arktype'
-import { inspect } from 'util'
 import { createHash } from 'crypto'
 import {
   convertPublicKeyToJWK,
   decodeAttestationObject,
   type AttestationObject,
-  type CborValue,
 } from '../utils'
-import type { JWK } from '../../../../schema/passkey'
 
 const passkeysRegisterPayload = type({
   id: 'string < 250',
@@ -18,7 +15,11 @@ const passkeysRegisterPayload = type({
   clientDataJSON: 'string < 1024',
 })
 
-const fn: BasedFunction = async (based, payload, ctx) => {
+const fn: BasedFunction<typeof passkeysRegisterPayload.infer> = async (
+  based,
+  payload,
+  ctx,
+) => {
   if (!isWsContext(ctx)) {
     return null
   }
@@ -73,21 +74,21 @@ const fn: BasedFunction = async (based, payload, ctx) => {
 
     await db.delete('passkeyChallenge', storedChallenge.id)
 
-    const rpId =
+    const domain =
       process.env.DOMAIN ||
       process.env.BASED_DEV_SERVER_LOCAL_URL?.split('//')[1].split(':')[0]
-    if (!rpId) throw new Error('Invalid domain configuration')
+    if (!domain) throw new Error('Invalid domain configuration')
 
     let [protocol, clientDomain] = clientData.origin.split('://')
     clientDomain = clientDomain.split(':')[0]
 
     // console.log({ protocol, clientDomain, rpId, clientData })
-    if (clientDomain !== rpId)
+    if (clientDomain !== domain)
       throw new Error('Invalid origin:', clientData.origin)
-    if (rpId !== 'localhost' && protocol === 'http')
+    if (domain !== 'localhost' && protocol === 'http')
       throw new Error('Invalid protocol:', clientData.origin)
 
-    const expectedRpIdHash = createHash('sha256').update(rpId).digest('hex')
+    const expectedRpIdHash = createHash('sha256').update(domain).digest('hex')
 
     if (!('authData' in decodedAttestationObject))
       throw new Error('No authData in attestation object')
