@@ -2,7 +2,13 @@ import { isWsContext, type BasedFunction } from '@based/sdk/functions'
 import { type } from 'arktype'
 import { inspect } from 'util'
 import { createHash } from 'crypto'
-import { decodeAttestationObject, type AttestationObject } from '../utils'
+import {
+  convertPublicKeyToJWK,
+  decodeAttestationObject,
+  type AttestationObject,
+  type CborValue,
+} from '../utils'
+import type { JWK } from '../../../../schema/passkey'
 
 const passkeysRegisterPayload = type({
   id: 'string < 250',
@@ -97,6 +103,7 @@ const fn: BasedFunction = async (based, payload, ctx) => {
       throw new Error('No attested credential data')
 
     const publicKey = authData.attestedCredentialData.credentialPublicKey
+    const publicKeyJWK = convertPublicKeyToJWK(publicKey)
     const signCount = authData.signCount
     const aaguid = authData.attestedCredentialData.aaguid
     const backupEligible = authData.flags.backupEligible
@@ -104,7 +111,7 @@ const fn: BasedFunction = async (based, payload, ctx) => {
 
     db.create('passkey', {
       credentialId: id,
-      publicKey,
+      publicKey: publicKeyJWK,
       signCount,
       aaguid,
       user: userId,

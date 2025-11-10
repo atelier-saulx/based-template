@@ -1,4 +1,6 @@
-type CborValue =
+import { JWK } from 'schema/passkey'
+
+export type CborValue =
   | string
   | number
   | boolean
@@ -215,4 +217,46 @@ export const decodeAttestationObject = (
   }
 
   throw new Error('Attestation object must be a CBOR map')
+}
+
+export const convertPublicKeyToJWK = (coseKey: {
+  [key: string]: CborValue
+}): JWK => {
+  const kty = coseKey['1']
+
+  if (kty === 2) {
+    const crv = coseKey['-1']
+    const x = coseKey['-2']
+    const y = coseKey['-3']
+
+    if (!(x instanceof Uint8Array) || !(y instanceof Uint8Array)) {
+      throw new Error('Invalid EC2 key coordinates')
+    }
+
+    const crvName = crv === 1 ? 'P-256' : crv === 2 ? 'P-384' : 'P-521'
+
+    return {
+      kty: 'EC',
+      crv: crvName,
+      x: Buffer.from(x).toString('base64url'),
+      y: Buffer.from(y).toString('base64url'),
+    }
+  }
+
+  if (kty === 3) {
+    const n = coseKey['-1']
+    const e = coseKey['-2']
+
+    if (!(n instanceof Uint8Array) || !(e instanceof Uint8Array)) {
+      throw new Error('Invalid RSA key parameters')
+    }
+
+    return {
+      kty: 'RSA',
+      n: Buffer.from(n).toString('base64url'),
+      e: Buffer.from(e).toString('base64url'),
+    }
+  }
+
+  throw new Error(`Unsupported key type: ${kty}`)
 }

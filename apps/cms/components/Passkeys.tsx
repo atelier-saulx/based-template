@@ -39,47 +39,105 @@ export const Passkeys = () => {
     console.log('running passkeys test')
   }, [])
   return (
-    <div
-      onClick={async () => {
-        if (window.PublicKeyCredential) {
-          try {
-            console.log('getting config')
-            const config = await client.call('passkeys-register')
+    <>
+      <div
+        onClick={async () => {
+          if (window.PublicKeyCredential) {
+            try {
+              const config = await client.call('passkeys-register')
 
-            console.log({ config })
-            config.user.id = toArrayBuffer(config.user.id)
-            config.challenge = base64urlToArrayBuffer(config.challenge)
-            const credential = (await navigator.credentials.create({
-              publicKey: config,
-            })) as PublicKeyCredential | null
-            console.log({ credential })
-            const response =
-              credential?.response as AuthenticatorAttestationResponse
-            if (!credential?.response) throw new Error('No credential response')
+              config.user.id = toArrayBuffer(config.user.id)
+              config.challenge = base64urlToArrayBuffer(config.challenge)
+              const credential = (await navigator.credentials.create({
+                publicKey: config,
+              })) as PublicKeyCredential | null
+              const response =
+                credential?.response as AuthenticatorAttestationResponse
+              if (!credential?.response)
+                throw new Error('No credential response')
 
-            const res = await client.call('passkeys-register-verify', {
-              id: credential?.id,
-              rawId: arrayBufferToBase64url(credential.rawId),
-              type: credential.type,
-              attestationObject: arrayBufferToBase64url(
-                response.attestationObject,
-              ),
-              clientDataJSON: arrayBufferToBase64url(response.clientDataJSON),
-            })
-            console.log({ res })
-          } catch (error) {
-            toast('Error registering passkey', {
-              description:
-                error instanceof Error ? error.message : String(error),
-              icon: 'error-filled',
-              color: 'red',
-            })
-            return
+              const res = await client.call('passkeys-register-verify', {
+                id: credential?.id,
+                rawId: arrayBufferToBase64url(credential.rawId),
+                type: credential.type,
+                attestationObject: arrayBufferToBase64url(
+                  response.attestationObject,
+                ),
+                clientDataJSON: arrayBufferToBase64url(response.clientDataJSON),
+              })
+              if (res.ok) {
+                toast('Passkey registered', {
+                  icon: 'error-filled',
+                })
+              }
+            } catch (error) {
+              toast('Error registering passkey', {
+                description:
+                  error instanceof Error ? error.message : String(error),
+                icon: 'error-filled',
+                color: 'red',
+              })
+              return
+            }
           }
-        }
-      }}
-    >
-      register
-    </div>
+        }}
+      >
+        register
+      </div>
+      <div
+        onClick={async () => {
+          if (window.PublicKeyCredential) {
+            try {
+              const options = await client.call('passkeys-auth')
+              options.challenge = base64urlToArrayBuffer(options.challenge)
+              for (const credential of options?.allowCredentials) {
+                credential.id = base64urlToArrayBuffer(credential.id)
+              }
+              console.log({ options })
+
+              const assertion = await navigator.credentials.get({
+                publicKey: options,
+              })
+              console.log({ assertion })
+
+              // config.user.id = toArrayBuffer(config.user.id)
+              // config.challenge = base64urlToArrayBuffer(config.challenge)
+              // const credential = (await navigator.credentials.create({
+              //   publicKey: config,
+              // })) as PublicKeyCredential | null
+              // const response =
+              //   credential?.response as AuthenticatorAttestationResponse
+              // if (!credential?.response) throw new Error('No credential response')
+              //
+              // const res = await client.call('passkeys-register-verify', {
+              //   id: credential?.id,
+              //   rawId: arrayBufferToBase64url(credential.rawId),
+              //   type: credential.type,
+              //   attestationObject: arrayBufferToBase64url(
+              //     response.attestationObject,
+              //   ),
+              //   clientDataJSON: arrayBufferToBase64url(response.clientDataJSON),
+              // })
+              // if (res.ok) {
+              //   toast('Passkey registered', {
+              //     icon: 'error-filled',
+              //   })
+              // }
+            } catch (error) {
+              console.error(error)
+              toast('Error authentication with passkey', {
+                description:
+                  error instanceof Error ? error.message : String(error),
+                icon: 'error-filled',
+                color: 'red',
+              })
+              return
+            }
+          }
+        }}
+      >
+        get
+      </div>
+    </>
   )
 }
