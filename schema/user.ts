@@ -59,6 +59,21 @@ export const user: SchemaType = {
       prop: 'user',
     },
   },
+  passkeyChallenges: {
+    readOnly: true,
+    items: {
+      ref: 'passkeyChallenge',
+      prop: 'user',
+    },
+  },
+  passkeys: {
+    readOnly: true,
+    items: {
+      ref: 'passkey',
+      prop: 'user',
+    },
+  },
+  passkeysReminder: { type: 'timestamp' },
   createdAt: { type: 'timestamp', on: 'create' },
   updatedAt: { type: 'timestamp', on: 'update' },
 }

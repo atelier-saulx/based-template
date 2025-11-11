@@ -4,6 +4,8 @@ import { vote } from './vote'
 import { contestant } from './contestant'
 import { file } from './file'
 import { userSession } from './userSession'
+import { passkeyChallenge } from './passkeyChallenge'
+import { passkey } from './passkey'
 
 const schema: Schema = {
   locales: {
@@ -12,6 +14,8 @@ const schema: Schema = {
   types: {
     user,
     userSession,
+    passkeyChallenge,
+    passkey,
     vote,
     contestant,
     file,

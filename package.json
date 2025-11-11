@@ -23,7 +23,7 @@
     "@based/docs": "^0.3.1",
     "arktype": "2.1.20",
     "@based/stories": "^0.3.3",
-    "@based/ui": "8.3.1-alpha.2",
+    "@based/ui": "8.3.1-alpha.7",
     "@saulx/crypto": "^1.1.0",
     "inlines": "^0.5.0",
     "react": "^18.3.1",
@@ -39,4 +39,3 @@
     "vitest": "^3.2.4"
   }
 }
-

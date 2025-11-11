@@ -2,6 +2,9 @@ import { BasedQueryFunction } from '@based/functions'
 import { countryNames } from './countryNames'
 import { getIdTokenSecret } from '../auth/utils/getIdTokenSecret'
 import { verifyIdToken } from '../auth/utils/idToken'
+import { userStatuses } from 'schema/user'
+import { passkey } from 'schema/passkey'
+import { aaguids } from './aaguid'
 
 const parseUserAgent = (
   userAgent: string,
@@ -75,6 +78,7 @@ type Payload = {
 type UserObject = {
   name: string
   email: string
+  status: (typeof userStatuses)[keyof typeof userStatuses]
   sessions: {
     id: number
     date: number
@@ -83,6 +87,11 @@ type UserObject = {
     browser: string
     country: string
     current?: boolean
+  }[]
+  passkeys: {
+    id: number
+    aaguid: string
+    createdAt: number
   }[]
 }
 
@@ -102,7 +111,15 @@ const fn: BasedQueryFunction<Payload, UserObject> = async (
     .query('userSession', userSessionId)
     .include((a) => {
       a('user')
-        .include('email', 'name', 'picture')
+        .include(
+          'email',
+          'name',
+          'picture',
+          'status',
+          'passkeys.id',
+          'passkeys.aaguid',
+          'passkeys.createdAt',
+        )
         .include((b) => {
           b('sessions')
             .include('sessionType', 'userAgent', 'geo', 'updatedAt')
@@ -116,12 +133,18 @@ const fn: BasedQueryFunction<Payload, UserObject> = async (
         user: {
           name: string
           email: string
+          status: (typeof userStatuses)[keyof typeof userStatuses]
           sessions: {
             id: number
             sessionType: 'userSession' | 'magicLink'
             userAgent: string
             geo: string
             updatedAt: number
+          }[]
+          passkeys: {
+            id: number
+            aaguid: string
+            createdAt: number
           }[]
         }
       } = res.toObject()
@@ -134,6 +157,10 @@ const fn: BasedQueryFunction<Payload, UserObject> = async (
           ...parseUserAgent(session.userAgent),
           country: countryNames[session.geo] || 'Unknown',
           current: currentSession.id === session.id,
+        })),
+        passkeys: user.passkeys.map((passkey) => ({
+          ...passkey,
+          device: aaguids[passkey.aaguid]?.name || 'Unknown authenticator',
         })),
       })
     })
