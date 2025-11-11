@@ -10,6 +10,10 @@ export type User = {
   role: string
   status: string
   picture: string
+  passkeys: {
+    id: number
+  }[]
+  passkeysReminder: number
 }
 
 const userPayload = type({
@@ -45,7 +49,14 @@ const fn: BasedQueryFunction<
 
   return db
     .query('user', userSession.user.id)
-    .include('name', 'email', 'role', 'picture')
+    .include(
+      'name',
+      'email',
+      'role',
+      'picture',
+      'passkeys.id',
+      'passkeysReminder',
+    )
     .subscribe((res) => {
       update(res.toObject(), res.checksum)
     })

@@ -1,16 +1,28 @@
 import { type BasedFunction } from '@based/functions'
 import { getIdTokenSecret } from '../auth/utils/getIdTokenSecret'
 import { verifyIdToken } from '../auth/utils/idToken'
+import { type } from 'arktype'
 
-type Payload = {
-  name?: string
-  picture?: string
-  status?: 'active'
-  logout?: 'all' | number
-}
+const accountSettingsUpdatePayload = type({
+  'name?': 'string < 1024',
+  'picture?': 'string < 1024',
+  'status?': '"active"',
+  'logout?': '"all" | number.integer',
+  'passkeysReminder?': 'number.epoch',
+})
 
-const fn: BasedFunction<Payload> = async (based, payload, ctx) => {
+const fn: BasedFunction<typeof accountSettingsUpdatePayload.infer> = async (
+  based,
+  payload,
+  ctx,
+) => {
   const db = based.db
+
+  const validate = accountSettingsUpdatePayload(payload)
+  if (validate instanceof type.errors) {
+    console.error(validate.summary) // remove in production
+    throw new Error('Invalid arguments')
+  }
 
   const { token, userId } = ctx.session?.authState || {}
 
@@ -36,7 +48,7 @@ const fn: BasedFunction<Payload> = async (based, payload, ctx) => {
     throw new Error('Not allowed')
   }
 
-  const { name, picture, status, logout } = payload
+  const { name, picture, status, logout, passkeysReminder } = payload
 
   if (name) {
     db.update('user', currentSession.user.id, {
@@ -53,6 +65,12 @@ const fn: BasedFunction<Payload> = async (based, payload, ctx) => {
   if (status === 'active') {
     db.update('user', currentSession.user.id, {
       status,
+    })
+  }
+
+  if (typeof passkeysReminder !== 'undefined') {
+    db.update('user', currentSession.user.id, {
+      passkeysReminder,
     })
   }
 

@@ -73,6 +73,7 @@ export const user: SchemaType = {
       prop: 'user',
     },
   },
+  passkeysReminder: { type: 'timestamp' },
   createdAt: { type: 'timestamp', on: 'create' },
   updatedAt: { type: 'timestamp', on: 'update' },
 }

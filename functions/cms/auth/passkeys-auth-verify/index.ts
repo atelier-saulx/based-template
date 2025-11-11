@@ -3,6 +3,10 @@ import { type } from 'arktype'
 import { decodeAuthenticatorData } from '../utils'
 import { createHash, createVerify } from 'node:crypto'
 import { jwkToPem } from '../utils/jwkToPem'
+import { getIpInfo } from '../utils/getIpInfo'
+import { signIdToken } from '../utils/idToken'
+import { USER_TOKEN_EXPIRY } from '../login-magiclink'
+import { getIdTokenSecret } from '../utils/getIdTokenSecret'
 
 const passkeysAuthPayload = type({
   id: 'string < 250',
@@ -30,11 +34,6 @@ const fn: BasedFunction<typeof passkeysAuthPayload.infer> = async (
     throw new Error('Invalid payload')
   }
 
-  const userId = ctx.session?.authState?.userId
-  if (!userId) {
-    throw new Error('no user')
-  }
-
   try {
     const clientDataJSON = Buffer.from(payload.clientDataJSON, 'base64')
     const clientData = JSON.parse(clientDataJSON.toString())
@@ -54,21 +53,15 @@ const fn: BasedFunction<typeof passkeysAuthPayload.infer> = async (
       .query('passkeyChallenge', {
         challenge: clientData.challenge,
       })
-      .include('user.id')
       .get()
       .toObject()
 
     if (!storedChallenge) {
       throw new Error('Challenge not found or expired')
     }
-    if (storedChallenge.user?.id !== userId) {
-      throw new Error('Challenge does not belong to this user')
-    }
     db.delete('passkeyChallenge', storedChallenge.id)
 
-    if (Number(userHandle) !== userId) {
-      throw new Error('Wrong user handle')
-    }
+    const userId = Number(userHandle)
 
     if (clientData.type !== 'webauthn.get') {
       throw new Error('Wrong operation type')
@@ -106,6 +99,9 @@ const fn: BasedFunction<typeof passkeysAuthPayload.infer> = async (
       })
       .get()
       .toObject()
+    if (!user.id) {
+      throw new Error('User does not exist')
+    }
     if (!user.passkeys.length) {
       throw new Error('Passkey not registered')
     }
@@ -132,6 +128,30 @@ const fn: BasedFunction<typeof passkeysAuthPayload.infer> = async (
     if (!verified) {
       throw new Error('Signature verification failed')
     }
+
+    const { ip, userAgent, geo } = getIpInfo(based, ctx)
+
+    const userSession = await db.create('userSession', {
+      sessionType: 'userSession',
+      user,
+      ip,
+      userAgent,
+      geo,
+    })
+    const idTokenSecret = await getIdTokenSecret(based)
+    const sessionToken = signIdToken({ id: userSession }, idTokenSecret)
+    if (ctx.session) {
+      ctx.session.state ??= {}
+      ctx.session.state.sessionTokenId = userSession
+      ctx.session.state.lastHandledExpire = Date.now()
+      db.expire('userSession', userSession, USER_TOKEN_EXPIRY / 1000)
+    }
+
+    await based.renewAuthState(ctx, {
+      persistent: true,
+      userId: user.id,
+      token: sessionToken,
+    })
   } catch (error) {
     console.error(error)
     return { ok: false, error: 'Verification failed' }

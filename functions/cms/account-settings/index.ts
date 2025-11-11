@@ -2,6 +2,7 @@ import { BasedQueryFunction } from '@based/functions'
 import { countryNames } from './countryNames'
 import { getIdTokenSecret } from '../auth/utils/getIdTokenSecret'
 import { verifyIdToken } from '../auth/utils/idToken'
+import { userStatuses } from 'schema/user'
 
 const parseUserAgent = (
   userAgent: string,
@@ -75,6 +76,7 @@ type Payload = {
 type UserObject = {
   name: string
   email: string
+  status: (typeof userStatuses)[keyof typeof userStatuses]
   sessions: {
     id: number
     date: number
@@ -102,7 +104,7 @@ const fn: BasedQueryFunction<Payload, UserObject> = async (
     .query('userSession', userSessionId)
     .include((a) => {
       a('user')
-        .include('email', 'name', 'picture')
+        .include('email', 'name', 'picture', 'status')
         .include((b) => {
           b('sessions')
             .include('sessionType', 'userAgent', 'geo', 'updatedAt')
@@ -116,6 +118,7 @@ const fn: BasedQueryFunction<Payload, UserObject> = async (
         user: {
           name: string
           email: string
+          status: (typeof userStatuses)[keyof typeof userStatuses]
           sessions: {
             id: number
             sessionType: 'userSession' | 'magicLink'

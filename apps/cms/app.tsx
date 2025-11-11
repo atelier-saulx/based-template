@@ -4,12 +4,12 @@ import {
   AccountSettings,
   BasedUiProvider,
   Cms,
+  PasskeysReminder,
   useBasedSchema,
 } from '@based/ui'
 
 import basedConfig from '../../based'
 import { Connections } from './components/Connections'
-import { Passkeys } from './components/Passkeys'
 
 export const based: BasedClient = client(basedConfig)
 
@@ -27,7 +27,6 @@ const App = () => {
   const { data: schema } = useBasedSchema()
   return (
     <>
-      <Passkeys />
       <Cms.Body name={appName} hideWorkspaceSettings followMe={false}>
         <Cms.Auth
           // mode="email-password"
@@ -35,6 +34,7 @@ const App = () => {
           appName={appName}
           // loginEndpoint="login-password"
           loginEndpoint="login-magiclink"
+          usePasskeys
         />
         <Cms.Tab name="Content">
           {Object.keys(schema?.types ?? {}).map((type) => {
@@ -58,6 +58,7 @@ const App = () => {
           </Cms.Section>
         </Cms.Tab>
       </Cms.Body>
+      <PasskeysReminder />
     </>
   )
 }
