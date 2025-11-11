@@ -11,7 +11,7 @@ const passkeysRegisterPayload = type({
   id: 'string < 250',
   rawId: 'string < 250',
   type: 'string < 50',
-  attestationObject: 'string < 1024',
+  attestationObject: 'string < 2048',
   clientDataJSON: 'string < 1024',
 })
 
@@ -106,9 +106,12 @@ const fn: BasedFunction<typeof passkeysRegisterPayload.infer> = async (
     const publicKey = authData.attestedCredentialData.credentialPublicKey
     const publicKeyJWK = convertPublicKeyToJWK(publicKey)
     const signCount = authData.signCount
-    const aaguid = authData.attestedCredentialData.aaguid
+    const aaguidHex = authData.attestedCredentialData.aaguid
+    const aaguid = `${aaguidHex.slice(0, 8)}-${aaguidHex.slice(8, 12)}-${aaguidHex.slice(12, 16)}-${aaguidHex.slice(16, 20)}-${aaguidHex.slice(20, 32)}`
     const backupEligible = authData.flags.backupEligible
     const backupState = authData.flags.backupState
+
+    console.log({ aaguid })
 
     db.create('passkey', {
       credentialId: id,

@@ -3,6 +3,8 @@ import { countryNames } from './countryNames'
 import { getIdTokenSecret } from '../auth/utils/getIdTokenSecret'
 import { verifyIdToken } from '../auth/utils/idToken'
 import { userStatuses } from 'schema/user'
+import { passkey } from 'schema/passkey'
+import { aaguids } from './aaguid'
 
 const parseUserAgent = (
   userAgent: string,
@@ -86,6 +88,11 @@ type UserObject = {
     country: string
     current?: boolean
   }[]
+  passkeys: {
+    id: number
+    aaguid: string
+    createdAt: number
+  }[]
 }
 
 const fn: BasedQueryFunction<Payload, UserObject> = async (
@@ -104,7 +111,15 @@ const fn: BasedQueryFunction<Payload, UserObject> = async (
     .query('userSession', userSessionId)
     .include((a) => {
       a('user')
-        .include('email', 'name', 'picture', 'status')
+        .include(
+          'email',
+          'name',
+          'picture',
+          'status',
+          'passkeys.id',
+          'passkeys.aaguid',
+          'passkeys.createdAt',
+        )
         .include((b) => {
           b('sessions')
             .include('sessionType', 'userAgent', 'geo', 'updatedAt')
@@ -126,6 +141,11 @@ const fn: BasedQueryFunction<Payload, UserObject> = async (
             geo: string
             updatedAt: number
           }[]
+          passkeys: {
+            id: number
+            aaguid: string
+            createdAt: number
+          }[]
         }
       } = res.toObject()
       const user = currentSession.user || {}
@@ -137,6 +157,10 @@ const fn: BasedQueryFunction<Payload, UserObject> = async (
           ...parseUserAgent(session.userAgent),
           country: countryNames[session.geo] || 'Unknown',
           current: currentSession.id === session.id,
+        })),
+        passkeys: user.passkeys.map((passkey) => ({
+          ...passkey,
+          device: aaguids[passkey.aaguid]?.name || 'Unknown authenticator',
         })),
       })
     })

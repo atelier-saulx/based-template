@@ -9,6 +9,7 @@ const accountSettingsUpdatePayload = type({
   'status?': '"active"',
   'logout?': '"all" | number.integer',
   'passkeysReminder?': 'number.epoch',
+  'removePasskey?': '"all" | number.integer',
 })
 
 const fn: BasedFunction<typeof accountSettingsUpdatePayload.infer> = async (
@@ -38,17 +39,21 @@ const fn: BasedFunction<typeof accountSettingsUpdatePayload.infer> = async (
       sessions: {
         id: number
       }[]
+      passkeys: {
+        id: number
+      }[]
     }
   } | null = await db
     .query('userSession', userSessionId)
-    .include('user.id', 'user.sessions.id')
+    .include('user.id', 'user.sessions.id', 'user.passkeys.id')
     .get()
     .toObject()
   if (!currentSession || currentSession.user?.id !== Number(userId)) {
     throw new Error('Not allowed')
   }
 
-  const { name, picture, status, logout, passkeysReminder } = payload
+  const { name, picture, status, logout, passkeysReminder, removePasskey } =
+    payload
 
   if (name) {
     db.update('user', currentSession.user.id, {
@@ -89,6 +94,27 @@ const fn: BasedFunction<typeof accountSettingsUpdatePayload.infer> = async (
         throw new Error('Not allowed')
       }
       await db.delete('userSession', logout)
+    } else {
+      throw new Error('Invalid input')
+    }
+  }
+
+  if (removePasskey) {
+    if (removePasskey === 'all' && currentSession.user.passkeys?.length) {
+      await Promise.all([
+        currentSession.user.passkeys.map((passkey) =>
+          db.delete('passkey', passkey.id),
+        ),
+      ])
+    } else if (typeof removePasskey === 'number') {
+      if (
+        !currentSession.user.passkeys.find(
+          (passkey) => passkey.id === removePasskey,
+        )
+      ) {
+        throw new Error('Not allowed')
+      }
+      await db.delete('passkey', removePasskey)
     } else {
       throw new Error('Invalid input')
     }
