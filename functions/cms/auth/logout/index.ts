@@ -5,9 +5,8 @@ const fn: BasedFunction = async (based, payload, ctx) => {
     return null
   }
   const db = based.db
-  console.log('logging out')
 
-  const sessionTokenId = ctx.session?.state?.sessionTokenId
+  const sessionTokenId = ctx.session?.state?.userSession?.id
 
   if (!sessionTokenId) {
     console.error('No sessionTokenId')
@@ -17,7 +16,7 @@ const fn: BasedFunction = async (based, payload, ctx) => {
   db.delete('userSession', sessionTokenId)
 
   if (ctx.session?.state?.sessionTokenId) {
-    ctx.session.state.sessionTokenId = null
+    ctx.session.state.userSession = null
     ctx.session.state.lastHandledExpire = null
   }
 
