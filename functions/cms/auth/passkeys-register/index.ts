@@ -42,9 +42,16 @@ const fn: BasedFunction = async (based, _payload, ctx) => {
       name: user.email,
       displayName: user.name,
     },
-    pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
+    pubKeyCredParams: [
+      { type: 'public-key', alg: -7 }, // ES256
+      { type: 'public-key', alg: -257 }, // RS256
+      { type: 'public-key', alg: -8 }, // Ed25519 (if targeting newer YubiKeys)
+    ],
     authenticatorSelection: {
       authenticatorAttachment: 'cross-platform',
+      residentKey: 'required',
+      requireResidentKey: true,
+      userVerification: 'required',
     },
     timeout: 60000,
     attestation: 'direct',

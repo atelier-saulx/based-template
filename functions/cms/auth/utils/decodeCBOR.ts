@@ -73,6 +73,14 @@ export const decodeCBOR = (buffer: Uint8Array): CborValue => {
     }
 
     if (majorType === 4) {
+      if (additionalInfo === 31) {
+        const array: CborValue[] = []
+        while (buffer[offset] !== 0xff) {
+          array.push(decodeValue())
+        }
+        offset++
+        return array
+      }
       const length = getLength()
       const array: CborValue[] = []
       for (let i = 0; i < length; i++) {
@@ -82,6 +90,17 @@ export const decodeCBOR = (buffer: Uint8Array): CborValue => {
     }
 
     if (majorType === 5) {
+      if (additionalInfo === 31) {
+        const map: { [key: string]: CborValue } = {}
+        while (buffer[offset] !== 0xff) {
+          const key = decodeValue()
+          const value = decodeValue()
+          const keyStr = typeof key === 'string' ? key : String(key)
+          map[keyStr] = value
+        }
+        offset++
+        return map
+      }
       const length = getLength()
       const map: { [key: string]: CborValue } = {}
       for (let i = 0; i < length; i++) {

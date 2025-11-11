@@ -1,6 +1,24 @@
 import type { JWK } from 'schema/passkey'
 
 export const jwkToPem = (jwk: JWK): string => {
+  if (jwk.kty === 'OKP') {
+    const x = Buffer.from(jwk.x!, 'base64url')
+
+    const oid =
+      jwk.crv === 'Ed25519'
+        ? Buffer.from([0x2b, 0x65, 0x70])
+        : Buffer.from([0x2b, 0x65, 0x71])
+
+    const der = Buffer.concat([
+      Buffer.from([0x30, 0x2a, 0x30, 0x05, 0x06, 0x03]),
+      oid,
+      Buffer.from([0x03, 0x21, 0x00]),
+      x,
+    ])
+
+    return `-----BEGIN PUBLIC KEY-----\n${der.toString('base64')}\n-----END PUBLIC KEY-----`
+  }
+
   if (jwk.kty === 'EC') {
     const x = Buffer.from(jwk.x!, 'base64url')
     const y = Buffer.from(jwk.y!, 'base64url')

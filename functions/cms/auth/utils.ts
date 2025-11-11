@@ -124,6 +124,23 @@ export const convertPublicKeyToJWK = (coseKey: {
 }): JWK => {
   const kty = coseKey['1']
 
+  if (kty === 1) {
+    const crv = coseKey['-1']
+    const x = coseKey['-2']
+
+    if (!(x instanceof Uint8Array)) {
+      throw new Error('Invalid OKP key parameters')
+    }
+
+    const crvName = crv === 6 ? 'Ed25519' : crv === 7 ? 'Ed448' : 'unknown'
+
+    return {
+      kty: 'OKP',
+      crv: crvName,
+      x: Buffer.from(x).toString('base64url'),
+    }
+  }
+
   if (kty === 2) {
     const crv = coseKey['-1']
     const x = coseKey['-2']

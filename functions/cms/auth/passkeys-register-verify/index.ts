@@ -99,6 +99,7 @@ const fn: BasedFunction<typeof passkeysRegisterPayload.infer> = async (
       throw new Error('RP ID hash mismatch')
 
     if (!authData.flags.userPresent) throw new Error('User not present')
+    if (!authData.flags.userVerified) throw new Error('User not verified')
 
     if (!authData.attestedCredentialData)
       throw new Error('No attested credential data')
@@ -123,8 +124,10 @@ const fn: BasedFunction<typeof passkeysRegisterPayload.infer> = async (
       backupState,
     })
   } catch (error) {
-    console.error(error)
-    return { ok: false, error: 'Verification failed' }
+    console.error('Passkey registration verification failed:', error)
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error'
+    return { ok: false, error: 'Verification failed', details: errorMessage }
   }
 
   return { ok: true }
