@@ -1,5 +1,5 @@
 import { JWK } from 'schema/passkey'
-import { decodeCBOR } from './utils/decodeCBOR'
+import { decodeCBOR } from './decodeCBOR'
 
 export type CborValue =
   | string

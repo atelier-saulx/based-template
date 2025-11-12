@@ -1,6 +1,6 @@
 import { isWsContext, type BasedFunction } from '@based/sdk/functions'
 import { type } from 'arktype'
-import { decodeAuthenticatorData } from '../utils'
+import { decodeAuthenticatorData } from '../utils/passkeys'
 import { createHash, createVerify } from 'node:crypto'
 import { jwkToPem } from '../utils/jwkToPem'
 import { getIpInfo } from '../utils/getIpInfo'

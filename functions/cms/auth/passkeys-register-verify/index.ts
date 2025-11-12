@@ -5,7 +5,7 @@ import {
   convertPublicKeyToJWK,
   decodeAttestationObject,
   type AttestationObject,
-} from '../utils'
+} from '../utils/passkeys'
 
 const passkeysRegisterPayload = type({
   id: 'string < 250',
